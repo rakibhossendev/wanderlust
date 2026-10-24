@@ -3,7 +3,8 @@ import { Menu, User } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/", active: true },
-  { label: "Destinations", href: "/destinations" },
+  { label: "Add Destination", href: "/add-destination" },
+  { label: "All Destinations", href: "/all-destinations" },
   { label: "My Bookings", href: "/bookings" },
   { label: "Admin", href: "/admin" },
 ];
