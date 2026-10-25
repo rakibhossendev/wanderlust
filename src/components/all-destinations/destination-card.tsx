@@ -60,7 +60,7 @@ export function DestinationCard({
 
             {/* Book now */}
             <Link
-                href="/add-destination"
+                href={`/all-destinations/${destination._id}`}
                 className="mt-1 inline-flex w-fit items-center gap-1 text-xs font-semibold tracking-widest text-brand uppercase transition-colors hover:text-brand/80"
             >
                 Book Now

@@ -1,13 +1,6 @@
 import Link from "next/link";
 import { Menu, User } from "lucide-react";
-
-const navLinks = [
-  { label: "Home", href: "/", active: true },
-  { label: "Add Destination", href: "/add-destination" },
-  { label: "All Destinations", href: "/all-destinations" },
-  { label: "My Bookings", href: "/bookings" },
-  { label: "Admin", href: "/admin" },
-];
+import { NavLinks } from "./nav-links";
 
 export function Navbar() {
   return (
@@ -15,22 +8,7 @@ export function Navbar() {
       <nav className="relative mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Left: primary links */}
         <div className="flex items-center gap-6">
-          <ul className="hidden items-center gap-6 md:flex">
-            {navLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className={`relative text-sm font-medium transition-colors hover:text-brand ${
-                    link.active
-                      ? "text-brand after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-brand"
-                      : "text-neutral-700"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <NavLinks />
           {/* Mobile menu trigger (presentational) */}
           <button
             type="button"

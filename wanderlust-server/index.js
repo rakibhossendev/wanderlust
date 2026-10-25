@@ -1,6 +1,6 @@
 import express from "express"
 import "dotenv/config";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 
 const app = express();
@@ -24,9 +24,6 @@ export async function connectToMongoDb(){
 const mongoClient = await connectToMongoDb();
 const db = mongoClient.db("wanderlust");
 const destinationCollection = db.collection("destination");
-
-
-
 app.post("/add-destination",async (request,response) => {
     console.log("API was called");
     const data = request.body;
@@ -34,12 +31,19 @@ app.post("/add-destination",async (request,response) => {
     const result = await destinationCollection.insertOne(data);
     response.send(result);
 })
-
 app.get("/all-destinations",async(request,response) => {
     const result = await destinationCollection.find().toArray();
     response.send(result);
 })
 
-app.listen(PORT,()=> {
+app.get("/destination/:id",async (request,response) => {
+    const {id} = request.params;
+    const result = await destinationCollection.findOne({_id: new ObjectId(id)});
+
+    response.send(result);
+
+})
+
+app.listen(PORT,()=> { 
     console.log(`Express server running on port ${PORT}`);
 })
