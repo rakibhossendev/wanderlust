@@ -2,6 +2,7 @@ export interface CommonDataType {
     _id: string
     destinationName: string
     country: string
+    category?: string
     price: string
     duration: string
     departureDate: string

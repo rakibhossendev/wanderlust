@@ -35,13 +35,30 @@ app.get("/all-destinations",async(request,response) => {
     const result = await destinationCollection.find().toArray();
     response.send(result);
 })
+app.patch("/edit-destination/:id",async (request,response) => {
+    const {id} = request.params;
+
+    const data = request.body;
+    const result = await destinationCollection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set: data}
+    )
+
+    response.send(result)
+})
+
+app.delete("/delete-destination/:id",async (request,response) => {
+    const {id} = request.params;
+
+    const result = await destinationCollection.deleteOne({_id: new ObjectId(id)});
+    response.json(result);
+})
 
 app.get("/destination/:id",async (request,response) => {
     const {id} = request.params;
     const result = await destinationCollection.findOne({_id: new ObjectId(id)});
 
     response.send(result);
-
 })
 
 app.listen(PORT,()=> { 

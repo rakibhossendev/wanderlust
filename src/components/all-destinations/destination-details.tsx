@@ -5,12 +5,13 @@ import {
     CalendarDays,
     Check,
     MapPin,
-    Pencil,
     Star,
-    Trash2,
+  
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import type { CommonDataType } from "@/Ts/Type";
+import EditDestination from "./edit-destination";
+import DeleteDestination from "./delete-destination";
 
 interface DestinationDetailsProps {
     destination: CommonDataType;
@@ -49,22 +50,10 @@ export function DestinationDetails({
                 </Link>
 
                 <div className="flex items-center gap-2">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        className="h-9 gap-2 border-neutral-300 px-4 text-neutral-800"
-                    >
-                        <Pencil />
-                        Edit
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="outline"
-                        className="h-9 gap-2 border-destructive/30 px-4 text-destructive hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
-                    >
-                        <Trash2 />
-                        Cancel
-                    </Button>
+
+                    <EditDestination destination={destination}/>
+                    
+                    <DeleteDestination destinationId={destination._id}/>
                 </div>
             </div>
 
