@@ -1,7 +1,11 @@
+'use client'
+
 import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { CommonDataType } from "@/Ts/Type";
+import { useSession } from "@/lib/auth-client";
+
 
 interface PlanCardProps {
     destination: CommonDataType;
@@ -18,7 +22,37 @@ export function PlanCard({
     destination,
     includes = defaultIncludes,
 }: PlanCardProps) {
+    const {data: session} = useSession();
+
     const { destinationName, price, departureDate } = destination;
+
+    const handleBooking = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        const departureDate = Object.fromEntries(formData.entries()) as {departureDate: string};
+
+
+        const data = {
+            username: session?.user.name,
+            email: session?.user.email,
+            ...destination,
+            departureDate: departureDate.departureDate,
+            bookingDate: new Date()
+        }
+
+        const response = await fetch('http://localhost:5000/booking',{
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+
+        const responseData = await response.json();
+        console.log(responseData);
+
+    }
 
     return (
         <aside className="lg:sticky lg:top-20">
@@ -32,25 +66,28 @@ export function PlanCard({
 
                 <div className="my-5 h-px bg-neutral-200" />
 
-                {/* Departure date */}
-                <label htmlFor="departure-date" className="sr-only">
-                    Departure date for {destinationName}
-                </label>
-                <Input
-                    id="departure-date"
-                    type="date"
-                    defaultValue={departureDate}
-                    className="h-11 w-full rounded-lg border-neutral-200 bg-white px-3 text-sm text-neutral-800"
-                />
+                <form onSubmit={handleBooking}>
+                    {/* Departure date */}
+                    <label htmlFor="departure-date" className="sr-only">
+                        Departure date for {destinationName}
+                    </label>
+                    <Input
+                        id="departure-date"
+                        name="departureDate"
+                        type="date"
+                        defaultValue={departureDate}
+                        className="h-11 w-full rounded-lg border-neutral-200 bg-white px-3 text-sm text-neutral-800"
+                    />
 
-                {/* Book now */}
-                <Button
-                    type="button"
-                    className="mt-3 h-11 w-full gap-2 bg-brand text-sm font-semibold text-white hover:bg-brand/90"
-                >
-                    Book Now
-                    <ArrowRight />
-                </Button>
+                    {/* Book now */}
+                    <Button
+                        type="submit"
+                        className="mt-3 h-11 w-full gap-2 bg-brand text-sm font-semibold text-white hover:bg-brand/90"
+                    >
+                        Book Now
+                        <ArrowRight />
+                    </Button>
+                </form>
 
                 {/* Included perks */}
                 <ul className="mt-5 flex flex-col gap-2.5">

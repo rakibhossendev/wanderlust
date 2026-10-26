@@ -24,6 +24,8 @@ export async function connectToMongoDb(){
 const mongoClient = await connectToMongoDb();
 const db = mongoClient.db("wanderlust");
 const destinationCollection = db.collection("destination");
+const bookingCollection = db.collection("bookings");
+
 app.post("/add-destination",async (request,response) => {
     console.log("API was called");
     const data = request.body;
@@ -31,10 +33,33 @@ app.post("/add-destination",async (request,response) => {
     const result = await destinationCollection.insertOne(data);
     response.send(result);
 })
+app.post("/booking",async (request,response) => {
+    const data = request.body;
+    const result = bookingCollection.insertOne(data);
+
+    response.send(result);
+
+})
+
 app.get("/all-destinations",async(request,response) => {
     const result = await destinationCollection.find().toArray();
     response.send(result);
 })
+
+app.get("/destination/:id",async (request,response) => {
+    const {id} = request.params;
+    const result = await destinationCollection.findOne({_id: new ObjectId(id)});
+
+    response.json(result);
+})
+
+app.get("/booking/:email",async (request,response) => {
+    const {email} = request.params
+    const result = await bookingCollection.find({email:email}).toArray();
+
+    response.send(result);
+})
+
 app.patch("/edit-destination/:id",async (request,response) => {
     const {id} = request.params;
 
@@ -54,12 +79,8 @@ app.delete("/delete-destination/:id",async (request,response) => {
     response.json(result);
 })
 
-app.get("/destination/:id",async (request,response) => {
-    const {id} = request.params;
-    const result = await destinationCollection.findOne({_id: new ObjectId(id)});
 
-    response.send(result);
-})
+
 
 app.listen(PORT,()=> { 
     console.log(`Express server running on port ${PORT}`);
