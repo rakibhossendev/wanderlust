@@ -2,6 +2,7 @@ import express from "express"
 import "dotenv/config";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
+import next from "next";
 
 const app = express();
 const PORT = 5000;
@@ -23,8 +24,15 @@ export async function connectToMongoDb(){
 
 const mongoClient = await connectToMongoDb();
 const db = mongoClient.db("wanderlust");
-const destinationCollection = db.collection("destination");
+const destinationCollection = db.collection("destinati(on");
 const bookingCollection = db.collection("bookings");
+
+const verifyUser = (request,response,next) => {
+    if(request.headers.authorization !== "Logged"){
+     return response.status(401).send({message: "Oops! You are unauthorized user."})
+    }
+    next();
+}
 
 app.post("/add-destination",async (request,response) => {
     console.log("API was called");
@@ -46,10 +54,11 @@ app.get("/all-destinations",async(request,response) => {
     response.send(result);
 })
 
-app.get("/destination/:id",async (request,response) => {
+app.get("/destination/:id",verifyUser,async (request,response) => {
+    
     const {id} = request.params;
     const result = await destinationCollection.findOne({_id: new ObjectId(id)});
-
+        
     response.json(result);
 })
 

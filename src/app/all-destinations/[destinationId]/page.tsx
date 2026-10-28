@@ -10,9 +10,11 @@ export default async function DestinationDetailsPage({
 }) {
     const { destinationId } = await params;
 
-    const response = await fetch(
-        `http://localhost:5000/destination/${destinationId}`,
-    );
+    const response = await fetch(`http://localhost:5000/destination/${destinationId}`,{
+        headers: {
+            authorization: "Logged"
+        }
+    });
 
     if (!response.ok) {
         notFound();
