@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { getTokenServer } from "@/lib/getToken";
+
 
 const categories = ["Beach", "Mountain", "City", "Adventure", "Cultural"];
 
@@ -24,6 +26,7 @@ export default function AddDestinationPage() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const getFormData = Object.fromEntries(formData.entries()) as unknown;
 
@@ -31,7 +34,7 @@ export default function AddDestinationPage() {
       method: "POST",
       headers:{
         "Content-Type":"application/json",
-        
+        authorization: `Bearer ${await getTokenServer()}`,
       },
       body: JSON.stringify(getFormData)
     });

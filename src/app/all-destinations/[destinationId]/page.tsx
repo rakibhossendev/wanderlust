@@ -2,17 +2,15 @@ import { notFound } from "next/navigation";
 import { CommonDataType } from "@/Ts/Type";
 import { DestinationDetails } from "@/components/all-destinations/destination-details";
 import { PlanCard } from "@/components/all-destinations/plan-card";
+import { getTokenServer } from "@/lib/getToken";
 
-export default async function DestinationDetailsPage({
-    params,
-}: {
-    params: Promise<{ destinationId: string }>;
-}) {
+
+export default async function DestinationDetailsPage({params,}: {params: Promise<{ destinationId: string }>;}) {
     const { destinationId } = await params;
 
     const response = await fetch(`http://localhost:5000/destination/${destinationId}`,{
         headers: {
-            authorization: "Logged"
+            authorization: `Bearer ${await getTokenServer()}`,
         }
     });
 
